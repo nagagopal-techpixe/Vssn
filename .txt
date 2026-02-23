@@ -1,0 +1,1149 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  Menu, ArrowUpRight, Plus, Minus, Grid, 
+  X, Maximize2, Terminal, Circle, Square, 
+  ChevronRight, ArrowRight, Sparkles as SparkleIcon,
+  Cpu, Wifi, Activity, Disc, Aperture, Play, Film, ScanLine, Smartphone, Monitor,
+  CornerDownLeft, Keyboard, Video, Settings, Layers, Zap, Fingerprint, TrendingUp,
+  Database, Network
+} from 'lucide-react';
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+// --- Utility ---
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+
+// --- Hooks ---
+const useOnScreen = (options) => {
+  const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, options);
+
+    if (ref.current) observer.observe(ref.current);
+    return () => {
+      if (ref.current) observer.unobserve(ref.current);
+    };
+  }, [options]);
+
+  return [ref, visible];
+};
+
+// --- DATA CONSTANTS ---
+
+const workflowSystem = [
+  { id: "01", title: "Signal", sub: "Intent before execution.", desc: "We begin by identifying signal. Brand intent. Cultural context. Constraints. This stage defines what matters — and what does not.", note: "No visuals yet. Only clarity." },
+  { id: "02", title: "Architecture", sub: "Systems before outputs.", desc: "We design the structure: Visual language, Aesthetic rules, Operational logic. This is where direction is set.", note: "Direction is set here." },
+  { id: "03", title: "Build", sub: "Synthetic construction.", desc: "Using machine intelligence, we construct visual systems and cultural assets. Nothing captured. All engineered.", note: "Everything engineered." },
+  { id: "04", title: "Deploy", sub: "Precision over volume.", desc: "Outputs are refined, tested, and delivered. Formats are resolved, not improvised. What ships is final.", note: "What ships is final." },
+  { id: "05", title: "Operate", sub: "Ongoing systems.", desc: "VSSN continues beyond delivery through managed systems and white-label operations. We don't exit after launch.", note: "System maintained." }
+];
+
+const faqItems = [
+  { q: "What is VSSN?", a: "VSSN is an AI Culture Studio. We design synthetic visual systems and cultural frameworks. Not content. Not campaigns. Systems." },
+  { q: "Is VSSN an agency?", a: "No. Agencies deliver projects. Content studios deliver volume. VSSN designs operating systems for culture." },
+  { q: "How is AI used?", a: "AI is a collaborator, not a shortcut. We combine machine intelligence with human design sensibility for intentional precision." },
+  { q: "Are visuals AI-generated?", a: "Yes. Constructed, not captured. No cameras, sets, or physical shoots. Every frame is engineered." },
+  { q: "Commercial rights?", a: "Yes. All outputs come with clear commercial usage rights. No stock assets. No borrowed styles." },
+  { q: "Who is this for?", a: "Brands entering the synthetic era. Founders building long-term identities. Agencies seeking white-label systems." }
+];
+
+const galleryData = [
+  { id: "SYS_01", type: "image", title: "Global Campaign Architecture", category: "AI Ads", ratio: "16:9", tc: "00:00:12:04", url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000", desc: "Generated asset package.", span: "md:col-span-2" },
+  { id: "SYS_02", type: "video", title: "Synthetic Identity V2", category: "Short Films", ratio: "16:9", tc: "00:02:14:22", url: "https://cdn.pixabay.com/video/2024/07/24/222837_large.mp4", desc: "Motion identity system.", span: "md:col-span-1" },
+  { id: "SYS_03", type: "image", title: "Experimental Logic", category: "Experimental", ratio: "16:9", tc: "00:01:05:10", url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000", desc: "Abstract data visualization.", span: "md:col-span-1" },
+  { id: "SYS_04", type: "video", title: "Vertical Output", category: "Reels", ratio: "9:16", tc: "00:00:15:00", url: "https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4", desc: "Social media optimization.", span: "md:col-span-1" },
+  { id: "SYS_05", type: "image", title: "Automated Assets", category: "AI Ads", ratio: "16:9", tc: "00:00:08:12", url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600", desc: "High-volume generation.", span: "md:col-span-1" },
+  { id: "SYS_06", type: "video", title: "Neural Rendering", category: "Music Videos", ratio: "9:16", tc: "00:00:22:18", url: "https://cdn.pixabay.com/video/2020/07/30/46026-447087782_large.mp4", desc: "Audio-reactive visuals.", span: "md:col-span-1" },
+  { id: "SYS_07", type: "image", title: "Deep Space", category: "Experimental", ratio: "16:9", tc: "00:01:05:10", url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=1000", desc: "Environment generation.", span: "md:col-span-1" },
+];
+
+const categories = ["All", "AI Ads", "Music Videos", "Short Films", "Reels", "Experimental"];
+
+const advantages = [
+    { id: "01", icon: Zap, title: "Velocity", desc: "Production timelines collapsed from months to days. We react to culture in real-time." },
+    { id: "02", icon: Layers, title: "Infinite Scale", desc: "One core asset system generates variations for every platform and format instantly." },
+    { id: "03", icon: Fingerprint, title: "Brand DNA", desc: "Models trained on your specific aesthetic ensure perfect consistency across every output." },
+    { id: "04", icon: TrendingUp, title: "Efficiency", desc: "Eliminate travel, sets, and logistics costs. Reallocate budget to strategy and reach." }
+];
+
+// --- SUB-COMPONENTS ---
+
+// 1. Scroll Progress Bar
+const ScrollProgress = () => {
+  const [width, setWidth] = useState(0);
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPosition = window.scrollY;
+      setWidth((scrollPosition / totalHeight) * 100);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  return (
+    <div className="fixed top-0 left-0 w-full h-[2px] bg-[#1A1A1A] z-[100]">
+      <div className="h-full bg-white transition-all duration-100 ease-out" style={{ width: `${width}%` }} />
+    </div>
+  );
+};
+
+// 2. Neural Vortex (THREADS STYLE: Colorful, Rotating 3D Sphere)
+const NeuralVortex = () => {
+  const canvasRef = useRef(null);
+  
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    
+    let animationId;
+    
+    // Mouse state for 3D interaction (Tilt)
+    let targetX = width / 2;
+    let targetY = height / 2;
+    let currentRotationX = 0;
+    let currentRotationY = 0;
+
+    const particles = [];
+    const particleCount = 2000; // Dense cloud
+    
+    // Threads-like color palette
+    const colors = ['#FF0055', '#FF4D4D', '#FFC857', '#8A2BE2', '#FFFFFF'];
+
+    // Initialize Particles on a Sphere Surface using Fibonacci algorithm
+    for(let i = 0; i < particleCount; i++) {
+        const phi = Math.acos(-1 + (2 * i) / particleCount);
+        const theta = Math.sqrt(particleCount * Math.PI) * phi;
+        const radius = 300 + (Math.random() * 50); // Vary radius slightly for "thickness"
+        
+        particles.push({
+            theta, 
+            phi, 
+            radius,
+            size: Math.random() * 2.5 + 0.5,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            speed: (Math.random() * 0.005) + 0.002
+        });
+    }
+
+    const animate = () => {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height); 
+        
+        ctx.globalCompositeOperation = 'lighter'; // Additive blending for glowing look
+
+        const cx = width / 2;
+        const cy = height / 2;
+        const fov = 400;
+        const time = Date.now() * 0.0003; 
+
+        // Smooth Mouse Rotation Follow
+        const mouseTiltX = (targetY / height - 0.5) * 1.5; 
+        const mouseTiltY = (targetX / width - 0.5) * 1.5;
+        
+        currentRotationX += (mouseTiltX - currentRotationX) * 0.05;
+        currentRotationY += (mouseTiltY - currentRotationY) * 0.05;
+
+        const baseRotationY = time; 
+
+        // Sort particles by depth (painter's algorithm)
+        const transformedParticles = particles.map(p => {
+             const theta = p.theta + p.speed + baseRotationY;
+             
+             let x = p.radius * Math.sin(p.phi) * Math.cos(theta);
+             let y = p.radius * Math.cos(p.phi);
+             let z = p.radius * Math.sin(p.phi) * Math.sin(theta);
+
+             // Apply Interaction Rotation (Tilt/Pan)
+             let y1 = y * Math.cos(currentRotationX) - z * Math.sin(currentRotationX);
+             let z1 = z * Math.cos(currentRotationX) + y * Math.sin(currentRotationX);
+             
+             let x1 = x * Math.cos(currentRotationY) - z1 * Math.sin(currentRotationY);
+             let z2 = z1 * Math.cos(currentRotationY) + x * Math.sin(currentRotationY);
+
+             const scale = fov / (fov + z2);
+             const x2d = cx + x1 * scale;
+             const y2d = cy + y1 * scale;
+
+             return { ...p, x2d, y2d, scale, z: z2 };
+        });
+
+        transformedParticles.sort((a, b) => b.z - a.z);
+
+        transformedParticles.forEach(p => {
+            if (p.scale > 0) {
+                const alpha = Math.max(0.1, Math.min(1, p.scale));
+                ctx.beginPath();
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = alpha;
+                ctx.arc(p.x2d, p.y2d, p.size * p.scale, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+
+        ctx.globalCompositeOperation = 'source-over';
+        animationId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    const handleMouseMove = (e) => { 
+        targetX = e.clientX; 
+        targetY = e.clientY; 
+    };
+
+    const handleResize = () => { 
+        width = canvas.width = window.innerWidth; 
+        height = canvas.height = window.innerHeight; 
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('resize', handleResize);
+        cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-90" />;
+};
+
+
+// 3. Concentric Enter Button
+const ConcentricButton = ({ onClick }) => {
+    return (
+        <div 
+            onClick={onClick}
+            className="relative w-64 h-64 mx-auto mt-12 flex flex-col items-center justify-center group cursor-pointer interactive"
+        >
+            <div className="absolute inset-0 border border-white/20 transition-transform duration-700 ease-[cubic-bezier(0.2,1,0.2,1)] group-hover:scale-[1.15] group-hover:border-[#D4FF00]/50"></div>
+            <div className="absolute inset-4 border border-white/30 transition-transform duration-700 delay-75 ease-[cubic-bezier(0.2,1,0.2,1)] group-hover:scale-110 group-hover:border-[#D4FF00]/70"></div>
+            <div className="absolute inset-8 border border-white/50 transition-transform duration-700 delay-150 ease-[cubic-bezier(0.2,1,0.2,1)] group-hover:scale-105 group-hover:border-[#D4FF00] bg-white/5 backdrop-blur-sm shadow-[0_0_30px_rgba(212,255,0,0)] group-hover:shadow-[0_0_30px_rgba(212,255,0,0.2)]"></div>
+            
+            <div className="relative z-10 text-center">
+                <span className="block text-[8px] font-mono text-[#D4FF00] tracking-[0.3em] mb-3 uppercase">Dynamic Interactions</span>
+                <span className="block text-sm font-display tracking-widest uppercase text-white leading-tight">Enter <br/> The System</span>
+            </div>
+            
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white transition-all group-hover:-translate-x-2 group-hover:-translate-y-2"></div>
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white transition-all group-hover:translate-x-2 group-hover:-translate-y-2"></div>
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white transition-all group-hover:-translate-x-2 group-hover:translate-y-2"></div>
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white transition-all group-hover:translate-x-2 group-hover:translate-y-2"></div>
+        </div>
+    );
+};
+
+// 4. Reveal Animation
+const Reveal = ({ children, className, delay = 0 }) => {
+  const [ref, visible] = useOnScreen({ threshold: 0.1 });
+  return (
+    <div 
+      ref={ref} 
+      className={cn("transition-all duration-700 ease-out", className)}
+      style={{ 
+        opacity: visible ? 1 : 0, 
+        transform: visible ? 'translateY(0)' : 'translateY(20px)',
+        transitionDelay: `${delay}ms`
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+// 5. Scramble Text
+const ScrambleText = ({ text, className, delay = 0 }) => {
+  const [display, setDisplay] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+  const elementRef = useRef(null);
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@&%';
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => { if (entry.isIntersecting) setIsVisible(true); }, { threshold: 0.1 });
+    if (elementRef.current) observer.observe(elementRef.current);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!isVisible) return;
+    let iterations = 0;
+    const timeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setDisplay(text.split('').map((letter, index) => {
+          if (index < iterations) return text[index];
+          return chars[Math.floor(Math.random() * chars.length)];
+        }).join(''));
+        if (iterations >= text.length) clearInterval(interval);
+        iterations += 1 / 3;
+      }, 30);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [isVisible, text, delay]);
+  return <span ref={elementRef} className={className}>{display || <span className="opacity-0">{text}</span>}</span>;
+};
+
+// 6. Typing Prompt
+const TypingPrompt = ({ start }) => {
+  const [text, setText] = useState('');
+  const fullText = "generate cinematic_masterpiece --style vssn --ar 16:9 --video";
+  useEffect(() => {
+    if (!start) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      setText(fullText.substring(0, i));
+      i++;
+      if (i > fullText.length) clearInterval(interval);
+    }, 50);
+    return () => clearInterval(interval);
+  }, [start]);
+  return (
+    <div className="font-mono text-xs md:text-sm text-neutral-500 mb-8 bg-black/50 border border-white/20 p-3 rounded-lg inline-flex items-center gap-2 max-w-full overflow-hidden backdrop-blur-sm shadow-[0_0_15px_rgba(255,255,255,0.05)]">
+      <Video className="w-3 h-3 text-[#FF0055]" />
+      <span className="text-[#FF0055]">/imagine video:</span>
+      <span className="text-white">{text}</span>
+      <span className="w-1.5 h-4 bg-white animate-pulse"></span>
+    </div>
+  );
+};
+
+// 7. Synthetic Field (3D Data Cloud for Advantages Section)
+const SyntheticField = () => {
+  const canvasRef = useRef(null);
+  const containerRef = useRef(null);
+  
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    
+    const particles = [];
+    const numParticles = 800;
+    let currentRotX = 0;
+    let currentRotY = 0;
+    let targetRotX = 0;
+    let targetRotY = 0;
+
+    for (let i = 0; i < numParticles; i++) {
+        particles.push({
+            x: (Math.random() - 0.5) * 2000,
+            y: (Math.random() - 0.5) * 1000,
+            z: (Math.random() - 0.5) * 2000,
+            size: Math.random() * 2,
+            opacity: Math.random() * 0.5 + 0.1
+        });
+    }
+
+    let animationFrame;
+    const fov = 400;
+
+    const render = () => {
+        ctx.fillStyle = '#000000';
+        ctx.fillRect(0, 0, width, height);
+        const cx = width / 2;
+        const cy = height / 2;
+
+        let scrollProgress = 0;
+        if (containerRef.current) {
+             const rect = containerRef.current.getBoundingClientRect();
+             scrollProgress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+        }
+
+        currentRotX += (targetRotX - currentRotX) * 0.05;
+        currentRotY += (targetRotY - currentRotY) * 0.05;
+
+        const cameraZ = scrollProgress * 1500; 
+
+        particles.forEach(p => {
+            let x = p.x;
+            let y = p.y;
+            let z = p.z - cameraZ;
+
+            while (z < -1000) z += 2000;
+            while (z > 1000) z -= 2000;
+
+            let tx = x * Math.cos(currentRotY) - z * Math.sin(currentRotY);
+            let tz = z * Math.cos(currentRotY) + x * Math.sin(currentRotY);
+            x = tx;
+            z = tz;
+
+            let ty = y * Math.cos(currentRotX) - z * Math.sin(currentRotX);
+            tz = z * Math.cos(currentRotX) + y * Math.sin(currentRotX);
+            y = ty;
+            z = tz;
+
+            const scale = fov / (fov + z);
+            const x2d = cx + x * scale;
+            const y2d = cy + y * scale;
+
+            if (scale > 0 && z > -fov) {
+                const alpha = Math.max(0, Math.min(1, (1000 - Math.abs(z)) / 1000)) * p.opacity;
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.rect(x2d, y2d, p.size * scale, p.size * scale);
+                ctx.fill();
+            }
+        });
+
+        animationFrame = requestAnimationFrame(render);
+    };
+
+    const handleMouseMove = (e) => {
+        const nx = (e.clientX / window.innerWidth) - 0.5;
+        const ny = (e.clientY / window.innerHeight) - 0.5;
+        targetRotY = nx * 0.5;
+        targetRotX = ny * 0.5;
+    };
+
+    const handleResize = () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
+    render();
+
+    return () => {
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('resize', handleResize);
+        cancelAnimationFrame(animationFrame);
+    };
+  }, []);
+
+  return (
+    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-50" />
+    </div>
+  );
+};
+
+// 8. 3D Orbit Gallery (Optimized Performance)
+const OrbitGallery = ({ items, onSelect }) => {
+    const trackRef = useRef(null);
+    const requestRef = useRef(null);
+    const angleRef = useRef(0);
+    const [tilt, setTilt] = useState({ x: -5, y: 0 });
+
+    // Optimized Animation Loop: Updates DOM directly via Ref instead of React State
+    useEffect(() => {
+        const animate = () => {
+            angleRef.current = (angleRef.current + 0.15) % 360;
+            if (trackRef.current) {
+                trackRef.current.style.transform = `rotateY(${angleRef.current}deg)`;
+            }
+            requestRef.current = requestAnimationFrame(animate);
+        };
+        requestRef.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, []);
+
+    const handleMouseMove = (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 40; 
+        const y = (e.clientY / window.innerHeight - 0.5) * -20; 
+        setTilt({ x: -5 + y, y: x });
+    };
+
+    const radius = typeof window !== 'undefined' && window.innerWidth > 768 ? 550 : 300;
+
+    return (
+        <section className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center perspective-[2000px] border-b border-white/10" onMouseMove={handleMouseMove} id="gallery">
+            
+            <div className="absolute top-12 left-12 z-20 pointer-events-none">
+                 <h2 className="text-4xl md:text-6xl font-display font-medium uppercase text-white mb-2">3D ARCHIVE</h2>
+                 <p className="text-xs font-mono text-white/50 tracking-widest uppercase">Drag to explore / Click to expand</p>
+            </div>
+
+            {/* Orbit Container */}
+            <div 
+                className="relative w-full h-full flex items-center justify-center preserve-3d z-10 transition-transform duration-300 ease-out"
+                style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
+            >
+                {/* Rotating Track */}
+                <div 
+                    ref={trackRef}
+                    className="relative w-[300px] md:w-[450px] h-[170px] md:h-[250px] preserve-3d will-change-transform"
+                >
+                    {items.map((item, i) => {
+                        const itemAngle = (i / items.length) * 360;
+                        return (
+                            <div 
+                                key={item.id}
+                                className="absolute inset-0 cursor-pointer group rounded-xl overflow-hidden border border-white/10 bg-black/80 hover:border-white transition-all duration-300 interactive"
+                                onClick={() => onSelect(item)}
+                                style={{
+                                    transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                                    backfaceVisibility: 'visible' 
+                                }}
+                            >
+                                <div className="w-full h-full relative">
+                                    {item.type === 'video' ? (
+                                        <video src={item.url} autoPlay muted loop playsInline className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
+                                    ) : (
+                                        <img src={item.url} alt={item.title} className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
+                                    )}
+                                    
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                                    
+                                    <div className="absolute bottom-6 left-6 right-6 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+                                        <div className="flex justify-between items-end">
+                                            <div>
+                                                <h3 className="text-white font-display text-xl uppercase tracking-wider mb-1">{item.title}</h3>
+                                                <span className="text-[9px] font-mono text-[#D4FF00] tracking-widest uppercase px-2 py-1 border border-[#D4FF00]/30 bg-[#D4FF00]/10">{item.category}</span>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                                                <Play className="w-3 h-3 text-black fill-black ml-0.5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
+        </section>
+    )
+}
+
+// 9. Process 3D (Workflow)
+const Process3D = () => {
+    const containerRef = useRef(null);
+    const canvasRef = useRef(null);
+    const [activeStep, setActiveStep] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!containerRef.current) return;
+            const { top, height } = containerRef.current.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            let progress = (window.scrollY - containerRef.current.offsetTop) / (height - windowHeight);
+            
+            if (progress < 0) progress = 0;
+            if (progress > 1) progress = 1;
+            
+            const totalSteps = workflowSystem.length;
+            const currentStep = Math.min(Math.floor(progress * totalSteps), totalSteps - 1);
+            
+            if (currentStep !== activeStep) {
+                setActiveStep(currentStep);
+            }
+            
+            if (canvasRef.current) {
+                canvasRef.current.scrollProgress = progress;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [activeStep]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const particles = [];
+        const layerCount = 5;
+        const particlesPerLayer = 100;
+
+        for (let l = 0; l < layerCount; l++) {
+            for (let i = 0; i < particlesPerLayer; i++) {
+                particles.push({
+                    x: (Math.random() - 0.5) * width * 2,
+                    y: (Math.random() - 0.5) * height * 2,
+                    z: l * 400 + Math.random() * 200,
+                    size: Math.random() * 1.5,
+                    opacity: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        let animationFrame;
+        
+        const render = () => {
+            const progress = canvas.scrollProgress || 0;
+            ctx.fillStyle = '#000000'; 
+            ctx.fillRect(0, 0, width, height);
+            
+            const cx = width / 2;
+            const cy = height / 2;
+            const fov = 400;
+
+            const cameraZ = progress * 2000; 
+            
+            particles.forEach(p => {
+                let relZ = p.z - cameraZ;
+                const loopDepth = 2400;
+                while (relZ < -fov) relZ += loopDepth; 
+                while (relZ > loopDepth - fov) relZ -= loopDepth;
+
+                const scale = fov / (fov + relZ);
+                const x2d = p.x * scale + cx;
+                const y2d = p.y * scale + cy;
+
+                const rot = progress * Math.PI * 0.5;
+                const rotX = (x2d - cx) * Math.cos(rot) - (y2d - cy) * Math.sin(rot) + cx;
+                const rotY = (x2d - cx) * Math.sin(rot) + (y2d - cy) * Math.cos(rot) + cy;
+
+                if (scale > 0) {
+                    const alpha = (1 - Math.abs(relZ) / 1500) * p.opacity;
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(rotX, rotY, p.size * scale, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            animationFrame = requestAnimationFrame(render);
+        };
+        
+        render();
+
+        const handleResize = () => {
+            if(canvasRef.current) {
+                width = canvasRef.current.width = window.innerWidth;
+                height = canvasRef.current.height = window.innerHeight;
+            }
+        };
+        window.addEventListener('resize', handleResize, { passive: true });
+        return () => {
+            cancelAnimationFrame(animationFrame);
+            window.removeEventListener('resize', handleResize);
+        };
+
+    }, []);
+
+    return (
+        <section id="process" ref={containerRef} className="relative h-[400vh] bg-black">
+            <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full opacity-60 pointer-events-none" />
+                
+                <div className="relative z-10 container mx-auto h-full flex items-center justify-center">
+                    <div className="max-w-2xl w-full p-8 md:p-12 bg-black/60 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl">
+                        <div className="mb-8 flex items-baseline justify-between border-b border-white/20 pb-4">
+                             <h2 className="text-4xl font-medium tracking-tighter">OPERATING SYSTEM</h2>
+                             <span className="font-mono text-xs text-[#555]">V.4.0</span>
+                        </div>
+                        
+                        <div className="relative h-[300px]">
+                             {workflowSystem.map((step, index) => (
+                                 <div 
+                                    key={step.id} 
+                                    className={`absolute top-0 left-0 w-full transition-all duration-700 transform ${
+                                        index === activeStep 
+                                            ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                                            : 'opacity-0 translate-y-8 pointer-events-none'
+                                    }`}
+                                 >
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <span className="font-mono text-xl text-white block tracking-widest border border-white/20 px-3 py-1 bg-black">{step.id}</span>
+                                        <h3 className="text-3xl font-display uppercase">{step.title}</h3>
+                                    </div>
+                                    <h4 className="text-sm font-mono text-[#777] uppercase tracking-widest mb-6 border-l-2 border-white pl-4">{step.sub}</h4>
+                                    <p className="text-lg leading-relaxed text-[#A0A0A0] font-light mb-6">
+                                        {step.desc}
+                                    </p>
+                                    <div className="flex items-center gap-2 text-xs font-mono text-white/50 bg-white/5 p-3 rounded w-fit border border-white/10">
+                                        <Activity className="w-3 h-3" />
+                                        {step.note}
+                                    </div>
+                                 </div>
+                             ))}
+                        </div>
+                        
+                        <div className="absolute bottom-12 right-12 flex flex-col gap-2">
+                             {workflowSystem.map((_, i) => (
+                                 <div 
+                                    key={i} 
+                                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === activeStep ? 'bg-white scale-125' : 'bg-white/20'}`}
+                                 />
+                             ))}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
+
+// 10. Gallery Modal (Inspection View)
+const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaItems }) => {
+  if (!isOpen || !selectedItem) return null;
+
+  return (
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-sm p-4">
+      <div className="relative w-full h-full md:w-[95vw] md:h-[95vh] flex flex-col bg-black border border-[#3A3A3A] shadow-2xl animate-in fade-in zoom-in duration-300">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#3A3A3A]">
+            <div className="flex items-center gap-4">
+                <span className="text-[10px] font-mono text-[#A0A0A0] uppercase tracking-widest">Inspection_Mode</span>
+                <span className="text-[10px] font-mono text-white bg-[#3A3A3A] px-2 py-0.5">{selectedItem.id}</span>
+            </div>
+            <button onClick={onClose} className="text-[#A0A0A0] hover:text-white transition-colors interactive">
+                <X className="w-5 h-5" />
+            </button>
+        </div>
+        <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <div className="flex-1 bg-[#050505] flex items-center justify-center p-4 md:p-12 relative" onClick={onClose}>
+                <div className="relative w-full h-full flex items-center justify-center">
+                    {selectedItem.type === 'video' ? (
+                         <video className="max-w-full max-h-full object-contain border border-[#1A1A1A]" src={selectedItem.url} autoPlay muted controls playsInline loop />
+                    ) : (
+                        <img src={selectedItem.url} alt={selectedItem.title} className="max-w-full max-h-full object-contain border border-[#1A1A1A]" />
+                    )}
+                </div>
+            </div>
+            <div className="w-full md:w-80 border-l border-[#3A3A3A] bg-black p-8 overflow-y-auto hidden md:block">
+                <div className="space-y-8">
+                    <div>
+                        <span className="text-[10px] uppercase tracking-widest text-[#555] mb-2 block font-mono">Designator</span>
+                        <h2 className="text-xl font-medium text-white">{selectedItem.title}</h2>
+                    </div>
+                    <div>
+                        <span className="text-[10px] uppercase tracking-widest text-[#555] mb-2 block font-mono">Parameters</span>
+                        <p className="text-sm text-[#A0A0A0] leading-relaxed">{selectedItem.desc}</p>
+                    </div>
+                    <div className="pt-8 border-t border-[#1A1A1A] space-y-2">
+                         <div className="flex justify-between text-[10px] font-mono"><span className="text-[#555]">TYPE</span><span className="text-white">{selectedItem.type.toUpperCase()}</span></div>
+                         <div className="flex justify-between text-[10px] font-mono"><span className="text-[#555]">RATIO</span><span className="text-white">{selectedItem.ratio}</span></div>
+                         <div className="flex justify-between text-[10px] font-mono"><span className="text-[#555]">STATUS</span><span className="text-white">FINAL_RENDER</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div className="h-20 border-t border-[#1A1A1A] bg-black flex items-center px-4 gap-2 overflow-x-auto">
+             {mediaItems.map((item) => (
+                <button key={item.id} onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }} className={cn("h-12 w-20 relative flex-shrink-0 border transition-all duration-200 overflow-hidden interactive", selectedItem.id === item.id ? "border-white opacity-100" : "border-[#1A1A1A] opacity-40 hover:opacity-80")}>
+                     {item.type === 'video' ? <video src={item.url} className="w-full h-full object-cover" muted /> : <img src={item.url} className="w-full h-full object-cover" alt="" />}
+                </button>
+             ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+// --- Main App ---
+
+const App = () => {
+  const [activeFaq, setActiveFaq] = useState(null);
+  const [selectedGalleryItem, setSelectedGalleryItem] = useState(null);
+  const [booting, setBooting] = useState(true);
+  const [bootLogs, setBootLogs] = useState([]);
+  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
+  const [isHoveringLink, setIsHoveringLink] = useState(false);
+  const [entered, setEntered] = useState(false);
+
+  // Boot Sequence - AI THEMED
+  useEffect(() => {
+    const logs = ["INITIALIZING VIDEO_NEURAL_NET...", "LOADING_DIFFUSION_MODELS...", "BYPASSING_PHYSICAL_CAMERAS...", "GENERATING_SYNTHETIC_ENV...", "SYSTEM_READY."];
+    let delay = 0;
+    logs.forEach((log, index) => {
+      setTimeout(() => {
+        setBootLogs(prev => [...prev, log]);
+        if (index === logs.length - 1) setTimeout(() => setBooting(false), 1200);
+      }, delay);
+      delay += Math.random() * 300 + 300;
+    });
+  }, []);
+
+  // Enter Key Listener
+  useEffect(() => {
+    if (!booting && !entered) {
+      const handleKeyDown = (e) => {
+        if (e.key === 'Enter') setEntered(true);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => window.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [booting, entered]);
+
+  // Cursor & Scroll
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      const target = e.target;
+      const isClickable = target.closest('button') || target.closest('a') || target.closest('.interactive');
+      setIsHoveringLink(!!isClickable);
+    };
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  const toggleFaq = (index) => setActiveFaq(prev => (prev === index ? null : index));
+
+  if (booting) {
+    return (
+      <div className="fixed inset-0 bg-[#050505] text-white font-mono text-sm p-10 z-[200] flex flex-col justify-end">
+        <div className="mb-4">
+          {bootLogs.map((log, i) => (
+            <div key={i} className="mb-1 text-neutral-400 font-mono text-xs">
+              <span className="text-neutral-600 mr-2">{`>`}</span>
+              {log}
+            </div>
+          ))}
+          <div className="animate-pulse text-white mt-2">_</div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={`bg-black text-white font-sans min-h-screen selection:bg-white selection:text-black cursor-none ${!entered ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #000; }
+        ::-webkit-scrollbar-thumb { background: #333; }
+        ::-webkit-scrollbar-thumb:hover { background: #fff; }
+        .bg-grid-pattern { background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 60px 60px; }
+        @keyframes scanline { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        .animate-scanline { animation: scanline 4s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-marquee { animation: marquee 20s linear infinite; }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+        .perspective-2000px { perspective: 2000px; }
+        .preserve-3d { transform-style: preserve-3d; }
+      `}</style>
+
+      {/* Global Background Elements */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-grid-pattern opacity-40"></div>
+      </div>
+      
+      {/* Scroll Progress - Only show when entered */}
+      {entered && (
+        <div className="fixed top-0 left-0 w-full h-[2px] bg-[#1A1A1A] z-[100]">
+          <ScrollProgress />
+        </div>
+      )}
+
+      {/* Custom Cursor */}
+      <div className={`fixed pointer-events-none z-[100] hidden md:block mix-blend-difference transition-all duration-100 ease-out`} style={{ left: cursorPos.x, top: cursorPos.y }}>
+        <div className={`relative transition-all duration-300 ${isHoveringLink ? 'scale-150' : 'scale-100'}`}>
+          <div className="absolute top-0 left-0 w-[40px] h-[1px] bg-white -translate-x-1/2"></div>
+          <div className="absolute top-0 left-0 h-[40px] w-[1px] bg-white -translate-y-1/2"></div>
+          {/* Target Reticle (Shows on Hover) */}
+          <div className={`absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-6 h-6 border border-white transition-all duration-300 ${isHoveringLink ? 'opacity-100 rotate-90 scale-75' : 'opacity-0 scale-150 rotate-0'}`}>
+             <div className="absolute top-0 left-0 w-1 h-1 bg-white"></div>
+             <div className="absolute top-0 right-0 w-1 h-1 bg-white"></div>
+             <div className="absolute bottom-0 left-0 w-1 h-1 bg-white"></div>
+             <div className="absolute bottom-0 right-0 w-1 h-1 bg-white"></div>
+          </div>
+          {/* Data Label */}
+          <div className={cn(
+            "absolute top-8 left-8 bg-white text-black px-1.5 py-0.5 text-[9px] font-mono font-bold tracking-widest transition-all duration-300",
+            isHoveringLink ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"
+          )}>
+            TARGET_LOCKED
+          </div>
+          <div className={cn("absolute top-4 left-4 text-[8px] font-mono text-white tracking-widest whitespace-nowrap bg-black px-1 border border-white/20 transition-opacity duration-300", isHoveringLink ? "opacity-0" : "opacity-100")}>X:{Math.round(cursorPos.x)} Y:{Math.round(cursorPos.y)}</div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <nav className={`fixed w-full z-50 top-0 border-b border-[#1A1A1A] bg-black/90 backdrop-blur-sm transition-opacity duration-1000 ${entered ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+        <div className="w-full px-6 h-16 flex justify-between items-center">
+          <div className="flex items-center gap-3 interactive group cursor-pointer">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+            <span className="font-bold text-xl tracking-tight">VSSN</span>
+            <span className="text-[10px] font-mono text-[#555] border border-[#333] px-1.5 py-0.5 rounded-sm bg-white/5">AI VIDEO PRODUCTION</span>
+          </div>
+          <div className="hidden md:flex gap-8 text-[11px] font-medium tracking-widest uppercase text-[#555]">
+            {['Studio', 'Gallery', 'Process', 'Access'].map((item) => (
+              <a key={item} href={`#${item.toLowerCase()}`} className="hover:text-white transition-colors interactive">
+                <ScrambleText text={item} />
+              </a>
+            ))}
+          </div>
+          <div className="hidden md:flex items-center gap-4 text-[10px] text-neutral-500 font-mono">
+            <div className="flex items-center gap-2"><ScanLine className="w-3 h-3 animate-pulse" /><span>GENERATING_VIDEO...</span></div>
+            <div className="flex items-center gap-2"><Wifi className="w-3 h-3" /><span>NET: SECURE</span></div>
+          </div>
+          <button className="md:hidden text-white interactive"><Menu className="w-5 h-5" /></button>
+        </div>
+      </nav>
+
+      {/* Hero Section - 3D GALAXY BACKGROUND */}
+      <section className="relative min-h-screen flex flex-col justify-center px-6 pt-16 border-b border-[#1A1A1A] overflow-hidden group">
+        
+        {/* 3D Threads Sphere - Hero Only */}
+        <div className="absolute inset-0 z-0">
+           <NeuralVortex />
+           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505] z-10 pointer-events-none"></div> 
+        </div>
+
+        {/* Cinema Video Overlay HUD */}
+        <div className="absolute inset-0 pointer-events-none flex flex-col justify-between p-12 z-0 opacity-40">
+           <div className="flex justify-between items-start">
+               <div className="w-8 h-8 border-l-2 border-t-2 border-white/50"></div>
+               <div className="w-8 h-8 border-r-2 border-t-2 border-white/50"></div>
+           </div>
+           <div className="flex justify-between items-end">
+               <div className="w-8 h-8 border-l-2 border-b-2 border-white/50"></div>
+               <div className="w-8 h-8 border-r-2 border-b-2 border-white/50"></div>
+           </div>
+           
+           {/* Center Crosshair */}
+           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+               <div className="w-12 h-[1px] bg-white/30"></div>
+               <div className="h-12 w-[1px] bg-white/30 absolute top-0 left-1/2 -translate-x-1/2"></div>
+           </div>
+           
+           {/* Recording Status */}
+           <div className="absolute top-16 right-16 flex items-center gap-2">
+              <div className="w-3 h-3 bg-[#FF0055] rounded-full animate-pulse"></div>
+              <span className="text-xs font-mono text-[#FF0055] tracking-widest">REC</span>
+           </div>
+        </div>
+
+        <div className="max-w-[1400px] w-full mx-auto grid md:grid-cols-12 gap-8 relative z-10">
+          <div className="md:col-span-12 flex flex-col items-center text-center justify-center min-h-[60vh]">
+            
+            {/* ENTER STATE */}
+            {!entered ? (
+                <div className="animate-in fade-in zoom-in duration-1000">
+                    <ConcentricButton onClick={() => setEntered(true)} />
+                </div>
+            ) : (
+                <div className="animate-in fade-in slide-in-from-bottom-10 duration-1000">
+                    <TypingPrompt start={entered} />
+                    <h1 className="text-6xl md:text-[8vw] font-medium tracking-tighter leading-[0.85] mb-12 mix-blend-exclusion text-white mt-8">
+                        <ScrambleText text="NOT CONTENT." className="block" delay={0} />
+                        <ScrambleText text="CULTURE." className="block text-white" delay={500} />
+                        <span className="block opacity-50">ENGINEERED.</span>
+                    </h1>
+                    
+                    <p className="text-xl md:text-2xl text-[#A0A0A0] leading-relaxed font-light mb-8 max-w-2xl mx-auto">
+                        VSSN is an AI-driven studio designing the visual language of the synthetic era. <span className="text-white">We do not capture visuals. We construct systems.</span>
+                    </p>
+                </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Rest of the Website - Only rendered if entered */}
+      {entered && (
+        <div className="animate-in fade-in duration-1000">
+            
+            {/* Philosophy / About */}
+            <section id="studio" className="py-32 border-b border-[#1A1A1A] bg-black/80 backdrop-blur-md">
+                <div className="container max-w-[1400px] mx-auto px-6">
+                <div className="grid md:grid-cols-2 gap-24">
+                    <div>
+                    <span className="block text-[10px] font-mono text-[#555] mb-8 tracking-widest">01 / MANIFESTO</span>
+                    <h2 className="text-4xl md:text-5xl leading-[1] tracking-tight mb-8">
+                        WE OPERATE AT THE INTERSECTION OF HUMAN IMAGINATION AND MACHINE INTELLIGENCE.
+                    </h2>
+                    </div>
+                    <div className="space-y-16 pt-8">
+                    <div>
+                        <h3 className="text-2xl mb-3 font-normal">Precision is aesthetic.</h3>
+                        <p className="text-[#777] text-sm max-w-xs leading-relaxed">Every decision reduces noise. Every choice amplifies signal. Clarity is the design.</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-8 border-t border-[#1A1A1A] pt-8">
+                        <div>
+                        <span className="text-[10px] font-mono text-white block mb-4 uppercase tracking-widest">VSSN IS</span>
+                        <ul className="space-y-2 text-sm text-[#A0A0A0]">
+                            <li>Synthetic vision lab</li>
+                            <li>Design entity</li>
+                            <li>System builder</li>
+                        </ul>
+                        </div>
+                        <div>
+                        <span className="text-[10px] font-mono text-[#333] block mb-4 uppercase tracking-widest">VSSN IS NOT</span>
+                        <ul className="space-y-2 text-sm text-[#333] line-through">
+                            <li>Content studio</li>
+                            <li>Trend-driven AI</li>
+                            <li>Volume agency</li>
+                        </ul>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+
+            {/* Advantages Section (With Synthetic Field) */}
+            <section className="py-32 border-b border-[#1A1A1A] bg-black relative overflow-hidden">
+              <SyntheticField />
+              <div className="container max-w-[1400px] mx-auto px-6 relative z-10">
+                <Reveal className="mb-20">
+                  <span className="text-[10px] font-mono text-[#555] mb-4 block tracking-widest">02 / ADVANTAGE</span>
+                  <h2 className="text-4xl md:text-6xl font-medium tracking-tighter mb-6">
+                    WHY BRANDS MIGRATE <br/> TO SYNTHETIC MEDIA.
+                  </h2>
+                </Reveal>
+
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-[#1A1A1A] border border-[#1A1A1A]">
+                  {advantages.map((item) => (
+                    <div key={item.id} className="bg-black/90 p-8 group hover:bg-[#0A0A0A]/90 transition-colors relative h-full flex flex-col justify-between backdrop-blur-sm">
+                      <div>
+                        <div className="mb-6 text-[#555] group-hover:text-white transition-colors">
+                          <item.icon className="w-6 h-6" />
+                        </div>
+                        <h3 className="text-lg font-medium text-white mb-2">{item.title}</h3>
+                        <p className="text-sm text-[#777] leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
+                      <div className="mt-8 text-[9px] font-mono text-[#333] opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest">
+                          SYSTEM_ADVANTAGE_{item.id}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Orbit Gallery */}
+            <OrbitGallery 
+                items={galleryData} 
+                onSelect={setSelectedGalleryItem} 
+            />
+
+            {/* Process 3D */}
+            <Process3D />
+
+            {/* FAQ Section */}
+            <section className="py-32 border-b border-[#1A1A1A]">
+                <div className="container max-w-[800px] mx-auto px-6">
+                <div className="mb-16">
+                    <h2 className="text-4xl tracking-tighter mb-2">FAQ</h2>
+                    <p className="text-[10px] font-mono text-[#555] uppercase">Clarity, before commitment.</p>
+                </div>
+                
+                <div className="border-t border-[#1A1A1A]">
+                    {faqItems.map((item, index) => (
+                    <div key={index} className="border-b border-[#1A1A1A]">
+                        <button 
+                        className="w-full py-6 text-left flex justify-between items-start hover:bg-[#0A0A0A] transition-colors group interactive"
+                        onClick={() => toggleFaq(index)}
+                        >
+                        <span className="text-lg font-light text-[#E4E4E4] group-hover:text-white transition-colors">{item.q}</span>
+                        <span className="font-mono text-xs text-[#555] pt-1">
+                            {activeFaq === index ? <Minus className="w-4 h-4"/> : <Plus className="w-4 h-4"/>}
+                        </span>
+                        </button>
+                        {activeFaq === index && (
+                        <div className="pb-8 text-[#A0A0A0] leading-relaxed animate-in fade-in slide-in-from-top-2 duration-300">
+                            {item.a}
+                        </div>
+                        )}
+                    </div>
+                    ))}
+                </div>
+                </div>
+            </section>
+
+            {/* Contact Section */}
+            <section id="access" className="py-32">
+                <div className="container max-w-[1400px] mx-auto px-6">
+                <div className="grid md:grid-cols-2 gap-24">
+                    <div>
+                    <h2 className="text-6xl md:text-8xl tracking-tighter leading-[0.85] mb-12">
+                        ENTER <br/> THE STUDIO.
+                    </h2>
+                    <p className="text-lg text-[#A0A0A0] font-light max-w-sm leading-relaxed">
+                        VSSN collaborates selectively. We work with teams building long-term systems — not short-term outputs.
+                    </p>
+                    </div>
+
+                    <form className="pt-4">
+                    <div className="space-y-12">
+                        {['Name', 'Organization', 'Role'].map((label) => (
+                        <div key={label} className="group relative">
+                            <label className="absolute -top-3 left-0 text-[9px] font-mono text-[#555] uppercase tracking-widest bg-black pr-2 group-focus-within:text-white transition-colors">{label}</label>
+                            <input type="text" className="w-full bg-transparent border-b border-[#333] py-4 text-xl focus:outline-none focus:border-white transition-colors text-white rounded-none" />
+                        </div>
+                        ))}
+                        <div className="group relative">
+                        <label className="absolute -top-3 left-0 text-[9px] font-mono text-[#555] uppercase tracking-widest bg-black pr-2 group-focus-within:text-white transition-colors">Intent</label>
+                        <textarea rows="3" className="w-full bg-transparent border-b border-[#333] py-4 text-xl focus:outline-none focus:border-white transition-colors resize-none text-white rounded-none"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div className="pt-16">
+                        <button type="button" className="text-xl font-medium text-white hover:text-[#A0A0A0] transition-colors flex items-center gap-4 interactive">
+                        Initiate Alignment 
+                        <ArrowRight className="w-5 h-5" />
+                        </button>
+                    </div>
+                    </form>
+                </div>
+                </div>
+            </section>
+
+            {/* Live System Footer */}
+            <div className="border-t border-[#1A1A1A] bg-[#050505]">
+                {/* Marquee */}
+                <div className="overflow-hidden border-b border-[#1A1A1A] py-2">
+                    <div className="flex gap-8 whitespace-nowrap animate-marquee text-[10px] font-mono text-[#333]">
+                        {Array(10).fill("SYSTEM STATUS: ONLINE /// ALL SYSTEMS OPERATIONAL /// NEURAL ENGINE ACTIVE /// ").map((t, i) => (
+                            <span key={i}>{t}</span>
+                        ))}
+                    </div>
+                </div>
+                
+                <footer className="py-20 text-xs">
+                    <div className="container max-w-[1400px] mx-auto px-6">
+                    <div className="grid md:grid-cols-4 gap-12 mb-20">
+                        <div>
+                        <h3 className="text-2xl font-bold tracking-tighter mb-4">VSSN</h3>
+                        <p className="text-[#555] font-mono">AI Culture Studio</p>
+                        </div>
+                        {['Studio', 'Operate', 'Connect'].map((col) => (
+                        <div key={col} className="space-y-4 text-[#555]">
+                            <span className="block text-white mb-2 font-mono uppercase tracking-widest text-[10px]">{col}</span>
+                            {['Systems', 'Artifacts', 'Access'].map(link => (
+                                <p key={link} className="hover:text-white cursor-pointer transition-colors interactive">{link}</p>
+                            ))}
+                        </div>
+                        ))}
+                    </div>
+                    <div className="flex flex-col md:flex-row justify-between items-end text-[#333] font-mono uppercase tracking-widest border-t border-[#111] pt-8">
+                        <p>© VSSN. Synthetic vision engine.</p>
+                        <p className="text-white text-right normal-case tracking-normal font-sans text-xl">Not content. <br/> Culture.</p>
+                    </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+      )}
+
+      {/* Interactive Modal Layer */}
+      <GalleryModal 
+        selectedItem={selectedGalleryItem} 
+        isOpen={!!selectedGalleryItem} 
+        onClose={() => setSelectedGalleryItem(null)} 
+        setSelectedItem={setSelectedGalleryItem}
+        mediaItems={galleryData} 
+      />
+    </div>
+  );
+};
+
+export default App;

@@ -11,6 +11,31 @@ import image8 from "./assest/vssimages/8.png";
 import image9 from "./assest/vssimages/9.png";
 import image10 from "./assest/vssimages/10.png";
 import image11 from "./assest/vssimages/11.png";
+import image12 from "./assest/vssimages/12.png";
+import image13 from "./assest/vssimages/13.png";
+import image14 from "./assest/vssimages/14.png";
+import image15 from "./assest/vssimages/15.png";
+import image16 from "./assest/vssimages/16.png";
+import image17 from "./assest/vssimages/17.jpeg";
+
+
+const video1 = "https://web30x.in/videos/4.MP4";
+const video2 =  "https://web30x.in/videos/1.MP4";
+const video3 =  "https://web30x.in/videos/2.MP4";
+const video4 =  "https://web30x.in/videos/7.MP4";
+const video5 =  "https://web30x.in/videos/5t.mp4";
+const video6 =  "https://web30x.in/videos/18.MP4";
+const video7 =  "https://web30x.in/videos/16.MP4";
+const video8 =  "https://web30x.in/videos/14.MP4";
+const video9 =  "https://web30x.in/videos/9t.mp4";
+const video10 =  "https://web30x.in/videos/11.MP4";
+const video11 =  "https://web30x.in/videos/11t.mp4";
+const video12 =  "https://web30x.in/videos/12t.mp4";
+const video13 =  "https://web30x.in/videos/17.MP4";
+const video14 =  "https://web30x.in/videos/13.MP4";
+const video15 =  "https://web30x.in/videos/15.MP4";
+const video16 =  "https://web30x.in/videos/16t.mp4";
+const video17 =  "https://web30x.in/videos/3.MP4";
 
 import { 
   Menu, ArrowUpRight, Plus, Minus, Grid, 
@@ -70,14 +95,144 @@ const faqItems = [
 ];
 
 const galleryData = [
-  { id: "SYS_01", type: "image", title: "Global Campaign Architecture", category: "AI Ads", ratio: "16:9", tc: "00:00:12:04", url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=1000", desc: "Generated asset package.", span: "md:col-span-2" },
-  { id: "SYS_02", type: "video", title: "Synthetic Identity V2", category: "Short Films", ratio: "16:9", tc: "00:02:14:22", url: "https://cdn.pixabay.com/video/2024/07/24/222837_large.mp4", desc: "Motion identity system.", span: "md:col-span-1" },
-  { id: "SYS_03", type: "image", title: "Experimental Logic", category: "Experimental", ratio: "16:9", tc: "00:01:05:10", url: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000", desc: "Abstract data visualization.", span: "md:col-span-1" },
-  { id: "SYS_04", type: "video", title: "Vertical Output", category: "Reels", ratio: "9:16", tc: "00:00:15:00", url: "https://cdn.pixabay.com/video/2020/05/25/40130-424930032_large.mp4", desc: "Social media optimization.", span: "md:col-span-1" },
-  { id: "SYS_05", type: "image", title: "Automated Assets", category: "AI Ads", ratio: "16:9", tc: "00:00:08:12", url: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600", desc: "High-volume generation.", span: "md:col-span-1" },
-  { id: "SYS_06", type: "video", title: "Neural Rendering", category: "Music Videos", ratio: "9:16", tc: "00:00:22:18", url: "https://cdn.pixabay.com/video/2020/07/30/46026-447087782_large.mp4", desc: "Audio-reactive visuals.", span: "md:col-span-1" },
-  { id: "SYS_07", type: "image", title: "Deep Space", category: "Experimental", ratio: "16:9", tc: "00:01:05:10", url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80&w=1000", desc: "Environment generation.", span: "md:col-span-1" },
+  {
+    id: "SYS_01",
+    type: "video",
+    url: video1,          // for modal + player
+    thumbnail: image1,   // for gallery card
+    title: "Swarovski: Nocturnal Radiance",
+    category: "Editorial Motion",
+  },
+  {
+    id: "SYS_02",
+    type: "video",
+    url: video2,
+    thumbnail: image2,
+    title: "Synthetic Identity V2",
+    category: "Short Films",
+  },
+  {
+    id: "SYS_03",
+    type: "video",
+    url: video3,
+    thumbnail: image3,
+    title: "Vantablack Vision",
+    category: "Engineered Instinc",
+  },
+  {
+    id: "SYS_04",
+    type: "video",
+    url: video4,
+    thumbnail: image4,
+    title: "Monogram Metamorphosis",
+    category: "Digital Artistry",
+  },
+  {
+    id: "SYS_05",
+    type: "video",
+    url: video5,
+    thumbnail: image5,
+    title: "The Elite Alpine Experience",
+    category: "Cinematic Short-Form Content",
+  },
+  {
+    id: "SYS_06",
+    type: "video",
+    url: video6,
+    thumbnail: image6,
+    title: "The Living Monogram Aesthetic",
+    category: "Aspirational Environmental Art",
+  },
+  {
+    id: "SYS_07",
+    type: "video",
+    url: video7,
+    thumbnail: image7,
+    title: "The Elite Peak Instinct",
+    category: "Action Narrative Short",
+  },
+  {
+    id: "SYS_08",
+    type: "video",
+    url: video8,
+    thumbnail: image8,
+    title: "Cultivating High-Performance Style",
+    category: "Artisanal Sportswear Brand Campaign",
+  },
+  {
+    id: "SYS_09",
+    type: "video",
+    url: video9,
+    thumbnail: image9,
+    title: "Nature’s Grand Unfinished World",
+    category: "Elite Cinematic Wilderness Art",
+  },
+  {
+    id: "SYS_10",
+    type: "video",
+    url: video10,
+    thumbnail: image10,
+    title: "Sirens of the Deep",
+    category: "Nature & Wildlife (Surreal)",
+  },
+  {
+    id: "SYS_11",
+    type: "video",
+    url: video11,
+    thumbnail: image11,
+    title: "Beneath the Flame",
+    category: "Cinematic Advertisement",
+  },
+  {
+    id: "SYS_12",
+    type: "video",
+    url: video12,
+    thumbnail: image12,
+    title: "Beyond the Frame: Higgsfield AI",
+    category: "Cinematic Dreams: The Higgsfield Journey",
+  },
+  {
+    id: "SYS_13",
+    type: "video",
+    url: video13,
+    thumbnail: image13,
+    title: "Nataraja 2077: The Digital Dance",
+    category: "Conceptual Art / Visual Narrative",
+  },
+    {
+    id: "SYS_14",
+    type: "video",
+    url: video14,
+    thumbnail: image14,
+    title: "Swan Lake Reimagined",
+    category: "Digital Art ",
+  },
+   {
+    id: "SYS_15",
+    type: "video",
+    url: video15,
+    thumbnail: image15,
+    title: "Glow of the Abyss",
+    category: "Art & Visual Effects (VFX)",
+  },
+   {
+    id: "SYS_16",
+    type: "video",
+    url: video16,
+    thumbnail: image16,
+    title: "Weightless Wonder",
+    category: "Digital Art & CGI",
+  },
+  {
+    id: "SYS_17",
+    type: "video",
+    url: video17,
+    thumbnail: image17,
+    title: "The Ocean's Jewelry Box",
+    category: "Surrealist Art",
+  },
 ];
+
 
 const categories = ["All", "AI Ads", "Music Videos", "Short Films", "Reels", "Experimental"];
 
@@ -497,6 +652,8 @@ const TiltCard = ({ children, className, onClick }) => {
 };
 
 // 8. Gallery Modal (Inspection View)
+
+
 const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaItems }) => {
   if (!isOpen || !selectedItem) return null;
 
@@ -508,7 +665,7 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                 <span className="text-[10px] font-mono text-[#A0A0A0] uppercase tracking-widest">Inspection_Mode</span>
                 <span className="text-[10px] font-mono text-white bg-[#3A3A3A] px-2 py-0.5">{selectedItem.id}</span>
             </div>
-            <button onClick={onClose} className="text-[#A0A0A0] hover:text-white transition-colors">
+            <button onClick={onClose} className="text-[#A0A0A0] hover:text-white transition-colors interactive">
                 <X className="w-5 h-5" />
             </button>
         </div>
@@ -516,7 +673,13 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
             <div className="flex-1 bg-[#050505] flex items-center justify-center p-4 md:p-12 relative" onClick={onClose}>
                 <div className="relative w-full h-full flex items-center justify-center">
                     {selectedItem.type === 'video' ? (
-                         <video className="max-w-full max-h-full object-contain border border-[#1A1A1A]" src={selectedItem.url} autoPlay muted controls playsInline loop />
+                        <video 
+  className="max-w-full max-h-full object-contain border controls border-[#1A1A1A]" 
+  src={selectedItem.url} 
+  autoPlay 
+  playsInline 
+  loop 
+/>
                     ) : (
                         <img src={selectedItem.url} alt={selectedItem.title} className="max-w-full max-h-full object-contain border border-[#1A1A1A]" />
                     )}
@@ -542,7 +705,7 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
         </div>
         <div className="h-20 border-t border-[#1A1A1A] bg-black flex items-center px-4 gap-2 overflow-x-auto">
              {mediaItems.map((item) => (
-                <button key={item.id} onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }} className={cn("h-12 w-20 relative flex-shrink-0 border transition-all duration-200 overflow-hidden", selectedItem.id === item.id ? "border-white opacity-100" : "border-[#1A1A1A] opacity-40 hover:opacity-80")}>
+                <button key={item.id} onClick={(e) => { e.stopPropagation(); setSelectedItem(item); }} className={cn("h-12 w-20 relative flex-shrink-0 border transition-all duration-200 overflow-hidden interactive", selectedItem.id === item.id ? "border-white opacity-100" : "border-[#1A1A1A] opacity-40 hover:opacity-80")}>
                      {item.type === 'video' ? <video src={item.url} className="w-full h-full object-cover" muted /> : <img src={item.url} className="w-full h-full object-cover" alt="" />}
                 </button>
              ))}
@@ -552,220 +715,109 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
   );
 };
 
-// 9. ThreeDStackGallery (Experimental 3D List View)
 
-const ThreeDStackGallery = ({ items, onSelect }) => {
-  const containerRef = useRef(null);
-  const arrowRef = useRef(null);
 
-  const progressRef = useRef(0);
-  const isActiveRef = useRef(false);
+// 9. Orbit Gallery (3D Rotating Carousel)
+const OrbitGallery = ({ items, onSelect }) => {
+    const trackRef = useRef(null);
+    const requestRef = useRef(null);
+    const angleRef = useRef(0);
+    const [tilt, setTilt] = useState({ x: -5, y: 0 });
+    const [hoveredId, setHoveredId] = useState(null);
 
-  const [progress, setProgress] = useState(0);
+    // Optimized Animation Loop: Updates DOM directly via Ref instead of React State
+    useEffect(() => {
+        const animate = () => {
+            angleRef.current = (angleRef.current + 0.04) % 360;
+            if (trackRef.current) {
+                trackRef.current.style.transform = `rotateY(${angleRef.current}deg)`;
+            }
+            requestRef.current = requestAnimationFrame(animate);
+        };
+        requestRef.current = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(requestRef.current);
+    }, []);
 
-  useEffect(() => {
-    const onWheel = (e) => {
-      if (!containerRef.current || !arrowRef.current) return;
-
-      /* ---------- CHECK ARROW ---------- */
-
-      const arrowRect = arrowRef.current.getBoundingClientRect();
-
-      const arrowInView =
-        arrowRect.top < window.innerHeight * 0.7 &&
-        arrowRect.bottom > window.innerHeight * 0.3;
-
-      // Not in section → normal scroll
-      if (!arrowInView) {
-        isActiveRef.current = false;
-        return;
-      }
-
-      // Activate gallery
-      isActiveRef.current = true;
-
-      /* ---------- UPDATE PROGRESS ---------- */
-
-      const next =
-        progressRef.current + e.deltaY * 0.0007;
-
-      const clamped = Math.max(0, Math.min(1, next));
-
-      // Block page scroll only while animating
-      if (clamped > 0 && clamped < 1) {
-        e.preventDefault();
-      }
-
-      /* ---------- SNAP ---------- */
-
-      if (clamped <= 0.05) {
-        progressRef.current = 0;
-      } else if (clamped >= 0.95) {
-        progressRef.current = 1;
-      } else {
-        progressRef.current = clamped;
-      }
-
-      setProgress(progressRef.current);
+    const handleMouseMove = (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 40;
+        const y = (e.clientY / window.innerHeight - 0.5) * -20;
+        setTilt({ x: -5 + y, y: x });
     };
 
-    /* ---------- RESET WHEN LEAVING ---------- */
+    // Auto-calculate radius so cards never overlap:
+    // r = (cardWidth + gap) / (2 * sin(π / n))
+    const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+    const cardW = isMobile ? 220 : 450;
+    const cardH = isMobile ? 130 : 250;
+    const gap = 40;
+    const radius = Math.ceil((cardW + gap) / (2 * Math.sin(Math.PI / items.length)));
 
-    const onScroll = () => {
-      if (!containerRef.current) return;
+    return (
+        <section
+            className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center perspective-[2000px] border-b border-white/10"
+            onMouseMove={handleMouseMove}
+            id="gallery"
+        >
+        
+            <div className="absolute top-12 left-12 z-20 pointer-events-none">
+                <h2 className="text-4xl md:text-6xl font-display font-medium uppercase text-white mb-2">3D ARCHIVE</h2>
+                <p className="text-xs font-mono text-white/50 tracking-widest uppercase">Move mouse to tilt / Click to expand</p>
+            </div>
 
-      const rect = containerRef.current.getBoundingClientRect();
-
-      const outOfView =
-        rect.bottom < 0 || rect.top > window.innerHeight;
-
-      if (outOfView) {
-        isActiveRef.current = false;
-        progressRef.current = 0;
-        setProgress(0);
-      }
-    };
-
-    /* ---------- LISTENERS ---------- */
-
-    window.addEventListener("wheel", onWheel, {
-      passive: false,
-    });
-
-    window.addEventListener("scroll", onScroll);
-
-    /* ---------- CLEANUP ---------- */
-
-    return () => {
-      window.removeEventListener("wheel", onWheel);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  return (
-    <section
-      ref={containerRef}
-      className="relative h-screen bg-black perspective-[2000px] overflow-hidden"
-    >
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden preserve-3d">
-
-        {/* TITLE + ARROW */}
-        <div className="absolute top-20 left-10 z-20 pointer-events-none">
-
-          <div className="flex items-center gap-2 mb-2 text-white/40">
-
-            {/* ACTIVATOR DOT */}
+            {/* Orbit Container */}
             <div
-              ref={arrowRef}
-              className="w-2 h-2 bg-white rounded-full animate-pulse"
-            ></div>
+                className="relative w-full h-full flex items-center justify-center preserve-3d z-10 transition-transform duration-300 ease-out"
+                style={{ transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
+            >
+                {/* Rotating Track */}
+                <div
+                    ref={trackRef}
+                    className="preserve-3d will-change-transform"
+                    style={{ width: cardW, height: cardH, position: 'relative' }}
+                >
+                    {items.map((item, i) => {
+                        const itemAngle = (i / items.length) * 360;
+                        return (
+                            <div
+                                key={item.id}
+                                className={`absolute inset-0 cursor-pointer group rounded-xl overflow-hidden border border-white/10 hover:border-white/40 bg-black/80 transition-all duration-300 interactive`}
+                                onClick={() => onSelect(item)}
+                                onMouseEnter={() => setHoveredId(item.id)}
+                                onMouseLeave={() => setHoveredId(null)}
+                                style={{
+                                    transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
+                                    backfaceVisibility: 'visible',
+                                }}
+                            >
+                                <div className="w-full h-full relative">
+                                    <img
+                                        src={item.thumbnail}
+                                        alt={item.title}
+                                        className="w-full h-full object-cover opacity-50 group-hover:opacity-100 transition-all duration-500 grayscale group-hover:grayscale-0"
+                                    />
 
-            <span className="font-mono text-xs uppercase tracking-widest">
-              Selected Works
-            </span>
-          </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 pointer-events-none"></div>
 
-          <h2 className="text-5xl md:text-8xl font-display font-medium uppercase text-white leading-none">
-            CINEMA. <br /> GENERATED.
-          </h2>
-        </div>
-
-        {/* STACK */}
-        <div className="relative w-full h-[60vh] flex items-center justify-center preserve-3d">
-
-          {items.map((item, i) => {
-            const total = items.length;
-
-            const activeIndex = progress * (total + 1) - 1;
-            const offset = i - activeIndex;
-
-            const x = offset * 250;
-            const z = -offset * 500;
-
-            const stackRotateY = -35;
-            const stackRotateX = 10;
-
-            let opacity = 1;
-
-            if (offset < -0.5) opacity = 0;
-            if (offset > 4) opacity = 0;
-            if (offset > 0) opacity = 1 - offset / 4;
-
-            if (opacity <= 0) return null;
-
-            return (
-              <div
-                key={item.id}
-                className="absolute w-[600px] aspect-video transition-transform duration-75 ease-linear will-change-transform cursor-pointer group"
-                style={{
-                  transform: `translate3d(${x}px, 0, ${z}px)
-                              rotateY(${stackRotateY}deg)
-                              rotateX(${stackRotateX}deg)`,
-
-                  zIndex: Math.round(100 - offset),
-                  opacity,
-                }}
-                onClick={() => onSelect(item)}
-              >
-                {/* CARD */}
-                <TiltCard>
-
-                  <div className="w-full h-full relative">
-
-                    {item.type === "video" ? (
-                      <video
-                        src={item.url}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all duration-500"
-                        muted
-                        loop
-                        autoPlay
-                        playsInline
-                      />
-                    ) : (
-                      <img
-                        src={item.url}
-                        className="w-full h-full object-cover opacity-80 group-hover:opacity-100 grayscale group-hover:grayscale-0 transition-all duration-500"
-                        alt={item.title}
-                      />
-                    )}
-
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent h-[40px] w-full animate-scanline opacity-50 pointer-events-none"></div>
-                  </div>
-
-                  {/* TEXT */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 z-20 pointer-events-none">
-
-                    <div className="flex justify-between items-end transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-
-                      <div>
-                        <h3 className="text-2xl font-display font-bold uppercase text-white mb-1">
-                          {item.title}
-                        </h3>
-
-                        <p className="text-xs font-mono text-white/60 uppercase tracking-widest">
-                          {item.category}
-                        </p>
-                      </div>
-
-                      <div className="w-10 h-10 bg-white text-black flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Play className="w-4 h-4 fill-black" />
-                      </div>
-
-                    </div>
-                  </div>
-
-                </TiltCard>
-              </div>
-            );
-          })}
-
-        </div>
-      </div>
-    </section>
-  );
+                                    <div className="absolute bottom-6 left-6 right-6 transform translate-y-4 group-hover:translate-y-0 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+                                        <div className="flex justify-between items-end">
+                                            <div>
+                                                <h3 className="text-white font-display text-xl uppercase tracking-wider mb-1">{item.title}</h3>
+                                                <span className="text-[9px] font-mono text-[#D4FF00] tracking-widest uppercase px-2 py-1 border border-[#D4FF00]/30 bg-[#D4FF00]/10">{item.category}</span>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center">
+                                                <Play className="w-3 h-3 text-black fill-black ml-0.5" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </section>
+    );
 };
-
-  
 
 // 10. Process 3D (Workflow)
 const Process3D = () => {
@@ -877,7 +929,7 @@ const Process3D = () => {
     }, []);
 
     return (
-        <section id="process" className="py-32 border-b border-[#1A1A1A]">
+        <section id="process" className="py-32 border-b border-[#1A1A1A] -mt-20">
         <div className="container max-w-[1400px] mx-auto px-6">
           <div className="mb-20">
             <h2 className="text-5xl tracking-tighter mb-6">OPERATING SYSTEM</h2>
@@ -1005,7 +1057,7 @@ const App = () => {
   }
 
   return (
-    <div className={`bg-black text-white font-sans min-h-screen selection:bg-white selection:text-black cursor-none ${!entered ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
+    <div className={`bg-black text-white font-sans min-h-screen selection:bg-white selection:text-black  ${!entered ? 'overflow-hidden h-screen' : 'overflow-x-hidden'}`}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&display=swap');
@@ -1039,7 +1091,7 @@ const App = () => {
       )}
 
       {/* Custom Cursor */}
-      <div className={`fixed pointer-events-none z-[100] hidden md:block mix-blend-difference transition-all duration-100 ease-out`} style={{ left: cursorPos.x, top: cursorPos.y }}>
+      <div className={`fixed pointer-events-none z-[300] hidden md:block mix-blend-difference transition-all duration-100 ease-out`} style={{ left: cursorPos.x, top: cursorPos.y }}>
         <div className={`relative transition-all duration-300 ${isHoveringLink ? 'scale-150' : 'scale-100'}`}>
           <div className="absolute top-0 left-0 w-[40px] h-[1px] bg-white -translate-x-1/2"></div>
           <div className="absolute top-0 left-0 h-[40px] w-[1px] bg-white -translate-y-1/2"></div>
@@ -1298,8 +1350,8 @@ const App = () => {
               </div>
             </section>
 
-            {/* REPLACED: ThreeDStackGallery (Experimental 3D List View) */}
-            <ThreeDStackGallery 
+            {/* 3D Orbit Gallery */}
+            <OrbitGallery 
                 items={galleryData} 
                 onSelect={setSelectedGalleryItem} 
             />
